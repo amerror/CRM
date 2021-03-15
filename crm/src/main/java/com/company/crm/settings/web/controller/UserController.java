@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserController extends HttpServlet {
     @Override
@@ -39,15 +41,17 @@ public class UserController extends HttpServlet {
         UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
 
         try{
-//            User user = us.login(loginAct,loginPwd,ip);
-//            request.getSession().setAttribute("user",user);
-//            PrintJson.printJsonFlag(response,true);
+            User user = us.login(loginAct,loginPwd,ip);
+            request.getSession().setAttribute("user",user);
+            PrintJson.printJsonFlag(response,true);
 
         }catch(Exception e){
             e.printStackTrace();
             String msg = e.getMessage();
-            //P63 17分钟
-
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response, map);
         }
     }
 }
