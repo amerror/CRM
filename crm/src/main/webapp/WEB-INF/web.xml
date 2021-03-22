@@ -22,6 +22,8 @@
     <url-pattern>*.do</url-pattern>
     <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
+  
+  
   <servlet>
     <servlet-name>UserController</servlet-name>
     <servlet-class>com.company.crm.settings.web.controller.UserController</servlet-class>
@@ -29,6 +31,15 @@
   <servlet-mapping>
     <servlet-name>UserController</servlet-name>
     <url-pattern>/settings/user/login.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ActivityController</servlet-name>
+    <servlet-class>com.company.crm.workbench.web.controller.ActivityController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActivityController</servlet-name>
+    <url-pattern>/workbench/Activity/getUserList.do</url-pattern>
   </servlet-mapping>
   
   
