@@ -3,9 +3,11 @@ package com.company.crm.workbench.web.controller;
 import com.company.crm.settings.domain.User;
 import com.company.crm.settings.service.UserService;
 import com.company.crm.settings.service.impl.UserServiceImpl;
-import com.company.crm.utils.MD5Util;
-import com.company.crm.utils.PrintJson;
-import com.company.crm.utils.ServiceFactory;
+import com.company.crm.utils.*;
+import com.company.crm.workbench.domain.Activity;
+import com.company.crm.workbench.service.ActivityService;
+import com.company.crm.workbench.service.impl.ActivityServiceImpl;
+import javafx.concurrent.Service;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ActivityController extends HttpServlet {
     @Override
@@ -24,9 +27,38 @@ public class ActivityController extends HttpServlet {
         String path = request.getServletPath();
         if("/workbench/Activity/getUserList.do".equals(path)){
             getUserList(request,response);
-        }else if("/settings/user/xxx.do".equals(path)){
-            //xxx(request,response)
+        }else if("/workbench/Activity/save.do".equals(path)){
+            save(request,response);
         }
+
+    }
+
+    private void save(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行市场活动添加操作");
+        String id = UUIDUtil.getUUID();
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("description");
+        String createTime = DateTimeUtil.getSysTime();
+        String createBy = ((User)request.getSession().getAttribute("user")).getName();
+
+        Activity a = new Activity();
+        a.setId(id);
+        a.setOwner(owner);
+        a.setName(name);
+        a.setStartDate(startDate);
+        a.setEndDate(endDate);
+        a.setCost(cost);
+        a.setDescription(description);
+        a.setCreateTime(createTime);
+        a.setCreateBy(createBy);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.save(a);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 

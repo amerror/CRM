@@ -53,6 +53,33 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$("#createActivityModal").modal("show");
 				}
 			})
+
+			//为保存时间按钮绑定时间，执行添加操作
+			$("#saveBtn").click(function(){
+				$.ajax({
+					url:"workbench/Activity/save.do",
+					data:{
+						"owner":$.trim($("#create-owner").val()),
+						"name":$.trim($("#create-name").val()),
+						"startDate":$.trim($("#create-startDate").val()),
+						"endDate":$.trim($("#create-endDate").val()),
+						"cost":$.trim($("#create-cost").val()),
+						"description":$.trim($("#create-description").val())
+					},
+					type:"post",
+					dataType:"json",
+					success:function(data){
+						if(data.success){
+							$("#activityAddForm")[0].reset();
+
+							$("#createActivityModal").modal("hide");
+						}else{
+							alert("添加市场活动失败");
+						}
+
+					}
+				})
+			})
 		})
 		
 		
@@ -74,7 +101,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form id="activityAddForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -85,18 +112,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-marketActivityName">
+                                <input type="text" class="form-control" id="create-name">
                             </div>
 						</div>
 						
 						<div class="form-group">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-startTime" readonly>
+								<input type="text" class="form-control time" id="create-startDate" readonly>
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-endTime" readonly>
+								<input type="text" class="form-control time" id="create-endDate" readonly>
 							</div>
 						</div>
                         <div class="form-group">
@@ -109,7 +136,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="form-group">
 							<label for="create-describe" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="create-describe"></textarea>
+								<textarea class="form-control" rows="3" id="create-description"></textarea>
 							</div>
 						</div>
 						
@@ -118,7 +145,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>
