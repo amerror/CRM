@@ -9,8 +9,8 @@
   <version>1.0</version>
   <packaging>war</packaging>
 
-  <dependencies>
 
+  <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

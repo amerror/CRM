@@ -4,6 +4,7 @@ import com.company.crm.settings.domain.User;
 import com.company.crm.settings.service.UserService;
 import com.company.crm.settings.service.impl.UserServiceImpl;
 import com.company.crm.utils.*;
+import com.company.crm.vo.PagInationVo;
 import com.company.crm.workbench.domain.Activity;
 import com.company.crm.workbench.service.ActivityService;
 import com.company.crm.workbench.service.impl.ActivityServiceImpl;
@@ -25,11 +26,38 @@ public class ActivityController extends HttpServlet {
         System.out.println("进入到市场活动控制器");
         System.out.println("ContextPath:"+request.getContextPath());
         String path = request.getServletPath();
+        System.out.println(path);
         if("/workbench/Activity/getUserList.do".equals(path)){
             getUserList(request,response);
         }else if("/workbench/Activity/save.do".equals(path)){
             save(request,response);
+        }else if("/workbench/Activity/pageList.do".equals(path)){
+            pageList(request, response);
         }
+
+    }
+
+    private void pageList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进行分页查询");
+        String name = request.getParameter("name");
+        String owner = request.getParameter("owner");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String pageNoStr = request.getParameter("pageNo");
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageNo = Integer.valueOf(pageNoStr);
+        int pageSize = Integer.valueOf(pageSizeStr);
+        int skipCount = (pageNo-1)*pageSize;
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("owner", owner);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("pageSize", pageSize);
+        map.put("skipCount", skipCount);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        PagInationVo<Activity> vo = as.pageList(map);
+        PrintJson.printJsonObj(response, vo);
 
     }
 
